@@ -69,6 +69,8 @@ def get_player_input(player, row_or_col):
             player_input = int(player_input)
             if validate_player_input(player_input):
                 return player_input
+            else:
+                print("input invalid - try again")
 
 
 def place_token(board, player):
@@ -87,12 +89,10 @@ def spot_is_empty(board, row, col):
 
 
 def players_turn(board):
-    place_token(board, 1)
-    print_board(board)
-    check_game_result(board)
-    place_token(board, 2)
-    print_board(board)
-    check_game_result(board)
+    for i in range(1, 3):
+        place_token(board, i)
+        print_board(board)
+        check_game_result(board)
 
 
 if __name__ == "__main__":

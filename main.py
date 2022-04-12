@@ -18,7 +18,7 @@ def print_board(board):
     print("   -----------")
 
 
-def check_board(board):
+def check_victory(board):
     if board[0][0] == board[0][1] == board[0][2]:
         return board[0][0]
     if board[1][0] == board[1][1] == board[1][2]:
@@ -48,8 +48,8 @@ def check_draw(board):
     return draw
 
 
-def check_result(board):
-    winner = check_board(board)
+def check_game_result(board):
+    winner = check_victory(board)
     if winner != 0:
         print("player " + str(winner) + " won")
         exit()
@@ -58,7 +58,7 @@ def check_result(board):
         exit()
 
 
-def validate_input(player_input: int):
+def validate_player_input(player_input: int):
     return bool(0 <= player_input <= 2)
 
 
@@ -67,28 +67,36 @@ def get_player_input(player, row_or_col):
         player_input = input("player " + str(player) + " please enter " + row_or_col + " #:")
         if player_input.isdigit():
             player_input = int(player_input)
-            if validate_input(player_input):
+            if validate_player_input(player_input):
                 return player_input
 
 
-def placing(player):
+def place_token(board, player):
     while True:
         row = get_player_input(player, "row")
         col = get_player_input(player, "col")
-        if gaming_board[row][col] == 0:
+        if spot_is_empty(board, row, col):
             gaming_board[row][col] = player
             return True
         else:
-            print("spot not empty")
+            print("spot not empty - try again")
 
 
-print_board(gaming_board)
-while True:
-    placing(1)
+def spot_is_empty(board, row, col):
+    return board[row][col] == 0
+
+
+def players_turn(board):
+    place_token(board, 1)
+    print_board(board)
+    check_game_result(board)
+    place_token(board, 2)
+    print_board(board)
+    check_game_result(board)
+
+
+if __name__ == "__main__":
+    print("Welcome to TicTacToe.")
     print_board(gaming_board)
-    check_result(gaming_board)
-    placing(2)
-    print_board(gaming_board)
-    check_result(gaming_board)
-
-
+    while True:
+        players_turn(gaming_board)

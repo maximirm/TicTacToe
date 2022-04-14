@@ -1,9 +1,3 @@
-gaming_board = [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0]
-]
-
 LF = {1: "X", 2: "O", 0: " "}
 
 
@@ -52,10 +46,10 @@ def check_game_result(board):
     winner = check_victory(board)
     if winner != 0:
         print("player " + str(winner) + " won")
-        exit()
+        return True
     elif check_draw(board):
         print("its a draw")
-        exit()
+        return True
 
 
 def validate_player_input(player_input: int):
@@ -78,7 +72,7 @@ def place_token(board, player):
         row = get_player_input(player, "row")
         col = get_player_input(player, "col")
         if spot_is_empty(board, row, col):
-            gaming_board[row][col] = player
+            board[row][col] = player
             return True
         else:
             print("spot not empty - try again")
@@ -88,15 +82,40 @@ def spot_is_empty(board, row, col):
     return board[row][col] == 0
 
 
+def start_new_game():
+    print("Welcome to TicTacToe.")
+    board = [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ]
+    players_turn(board)
+
+
+def ask_for_next_round():
+    while True:
+        player_input = input("Game Over - Do you want to play another round? [y/n]")
+        if player_input == "y":
+            return True
+        elif player_input == "n":
+            return False
+        else:
+            print("Input invalid.")
+
+
 def players_turn(board):
-    for i in range(1, 3):
-        place_token(board, i)
-        print_board(board)
-        check_game_result(board)
+    print_board(board)
+    while True:
+        for i in range(1, 3):
+            place_token(board, i)
+            print_board(board)
+            if check_game_result(board):
+                if ask_for_next_round():
+                    start_new_game()
+                else:
+                    print("Thanks for the ride- see you soon")
+                    exit()
 
 
 if __name__ == "__main__":
-    print("Welcome to TicTacToe.")
-    print_board(gaming_board)
-    while True:
-        players_turn(gaming_board)
+    start_new_game()
